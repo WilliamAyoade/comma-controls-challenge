@@ -93,9 +93,13 @@ def create_report(test, baseline, sample_rollouts, costs, num_segs):
   res.append(f'<img style="max-width:100%" src="data:image/png;base64,{img2base64(fig)}" alt="Plot">')
   res.append("</body></html>")
 
-  with open("report.html", "w", encoding='utf-8') as fob:
-    fob.write("\n".join(res))
-    print("Report saved to: './report.html'")
+  return "\n".join(res)
+
+
+def save_report(html, out_path="report.html"):
+  with open(out_path, "w", encoding='utf-8') as fob:
+    fob.write(html)
+  print(f"Report saved to: '{out_path}'")
 
 
 if __name__ == "__main__":
@@ -106,6 +110,7 @@ if __name__ == "__main__":
   parser.add_argument("--num_segs", type=int, default=100)
   parser.add_argument("--test_controller", default='pid', choices=available_controllers)
   parser.add_argument("--baseline_controller", default='pid', choices=available_controllers)
+  parser.add_argument("--out", type=str, default="report.html", help="Output HTML report path")
   args = parser.parse_args()
 
   data_path = Path(args.data_path)
@@ -136,4 +141,5 @@ if __name__ == "__main__":
     results = process_map(rollout_partial, files[SAMPLE_ROLLOUTS:], max_workers=16, chunksize=10)
     costs += [{'controller': controller_cat, **result[0]} for result in results]
 
-  create_report(args.test_controller, args.baseline_controller, sample_rollouts, costs, len(files))
+  html = create_report(args.test_controller, args.baseline_controller, sample_rollouts, costs, len(files))
+  save_report(html, args.out)

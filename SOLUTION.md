@@ -26,5 +26,5 @@ Generates `report.html`.
 
 ## Other experiments (not submitted)
 
-- `controllers/steer_lookup.py` — honest offline steer optimization (~33 on 10 segs)
+- `controllers/steer_lookup.py` — honest offline steer optimization (~33 on 10 segs); see `SOLUTION_STEER_LOOKUP.md` and `report.html`
 - `controllers/continuous_lookup.py` — analytic metric floor (~6.9; injects lataccel, not real steering)
